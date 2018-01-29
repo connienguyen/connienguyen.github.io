@@ -83,6 +83,7 @@
 				side: THREE.DoubleSide
 			});
 			var hiroMesh = new THREE.Mesh(hiroGeometry, normalMaterial);
+			hiroMesh.position.y = hiroGeometry.parameters.height/2;
 			hiroMarker.add(hiroMesh);
 
 			var kanjiMarker = new THREE.Group;
@@ -110,7 +111,7 @@
 
 			// Animations
 			function animateBobbing(mesh, t) {
-				mesh.position.y = 0.7*Math.sin(t) + 0;
+				mesh.position.y = 0.7*Math.sin(t) + 0.4;
 			}
 
 			var t = 0;
@@ -119,6 +120,7 @@
 					if ( child instanceof THREE.Mesh ) {
 						t += delta;
 						animateBobbing(child, t);
+						child.rotation.y += Math.PI*delta;
 					}
 				});
 			})
