@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<!-- library setup -->
+		<script src="../js/three.min.js"></script>
+		<script src="../js/ar.min.js"></script>
+		<script>THREEx.ArToolkitContext.baseURL = "../"</script>
+	</head>
+	<body style="margin: 0px; overflow: hidden; font-family: Monospace;">
+		<script>
+			// initialize renderer
+			var renderer = new THREE.WebGLRenderer({
+				antialias: true,
+				alpha: true
+			});
+			renderer.setClearColor(new THREE.Color('lightgrey'), 0)
+			renderer.setSize(640,480);
+			renderer.domElement.style.position = 'absolute';
+			renderer.domElement.style.top = '0px';
+			renderer.domElement.style.left = '0px';
+			document.body.appendChild(renderer.domElement);
+
+			// array of function for the rendering loop
+			var onRenderFcts = [];
+
+			// init scene and camera
+			var scene = new THREE.Scene();
+			var camera = new THREE.Camera();
+			scene.add(camera);
+
+			// handle arToolkitSource
+			var arToolkitSource = new THREEx.ArToolkitSource({
+				sourceType: 'webcam'
+			});
+
+			arToolkitSource.init(function onReady() {
+				onResize();
+			});
+
+			// handle window resize
+			window.addEventListener('resize', function() {
+				onResize();
+			});
+
+			function onResize() {
+				arToolkitSource.onResizeElement();
+				arToolkitSource.copySizeTo(renderer.domElement);
+				if ( arToolkitSource.arController !== null ) {
+					arToolkitSource.copySizeTo(arToolkitContext.arController.canvas);
+				}
+			}
+
+			// initialize arToolkitContext
+			var arToolkitContext = new THREEx.ArToolkitContext({
+				cameraParametersUrl: THREEx.ArToolkitContext.baseURL + 'data/camera_para.dat',
+				detectionMode: 'mono'
+			});
+
+			arToolkitContext.init(function onCompleted() {
+				camera.projectionMatrix.copy(arToolkitContext.getProjectionMatrix());
+			});
+
+			// update arToolkit on every frame
+			onRenderFcts.push(function() {
+				if ( arToolkitSource.ready === false ) return;
+
+				arToolkitContext.update(arToolkitSource.domElement);
+				scene.visible = camera.visible;
+			});
+
+			var hiroMarker = new THREE.Group;
+			hiroMarker.name = 'hiro';
+			scene.add(hiroMarker);
+			var _ = new THREEx.ArMarkerControls(arToolkitContext, hiroMarker, {
+				type: 'pattern',
+				patternUrl: THREEx.ArToolkitContext.baseURL + 'data/patt.hiro'
+			});
+			var hiroGeometry = new THREE.CubeGeometry(1,1,1);
+			var normalMaterial = new THREE.MeshNormalMaterial({
+				transparent: true,
+				opacity: 0.7,
+				side: THREE.DoubleSide
+			});
+			var hiroMesh = new THREE.Mesh(hiroGeometry, normalMaterial);
+			hiroMarker.add(hiroMesh);
+
+			var kanjiMarker = new THREE.Group;
+			kanjiMarker.name = 'kanji';
+			scene.add(kanjiMarker);
+			var _ = new THREEx.ArMarkerControls(arToolkitContext, kanjiMarker, {
+				type: 'pattern',
+				patternUrl: THREEx.ArToolkitContext.baseURL + 'data/patt.kanji'
+			});
+
+			// Load object for kanjiMarker
+			var objectLoader = new THREE.ObjectLoader();
+			objectLoader.load(
+				THREEx.ArToolkitContext.baseURL + 'data/teapot-claraio.json',
+				function (obj) {
+					obj.traverse(function (child) {
+						if ( child instanceof THREE.Mesh ) {
+							child.material = normalMaterial;
+							child.scale.set(0.4, 0.4, 0.4);
+						}
+					});
+					kanjiMarker.add(obj);
+				}
+				);
+
+			// Animations
+			function animateBobbing(mesh, t) {
+				mesh.position.y = 0.7*Math.sin(t) + 0;
+			}
+
+			var t = 0;
+			onRenderFcts.push(function (delta) {
+				kanjiMarker.children.forEach(function (child) {
+					if ( child instanceof THREE.Mesh ) {
+						t += delta;
+						animateBobbing(child, t);
+					}
+				});
+			})
+
+			// render the scene
+			onRenderFcts.push(function() {
+				renderer.render(scene, camera);
+			});
+
+			// run rendering loop
+			var lastTimeMsec = null;
+			requestAnimationFrame(function animate(nowMsec) {
+				requestAnimationFrame(animate);
+
+				lastTimeMsec = lastTimeMsec || nowMsec - 1000/60;
+				var deltaMsec = Math.min(200, nowMsec - lastTimeMsec);
+				lastTimeMsec = nowMsec;
+
+				onRenderFcts.forEach(function (onRenderFct) {
+					onRenderFct(deltaMsec/1000, nowMsec/1000);
+				});
+			})
+		</script>
+	</body>
+</html>
