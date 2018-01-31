@@ -125,6 +125,30 @@
 				});
 			})
 
+
+			// Visibility detector
+			var markers = scene.children.filter(child => child.type == 'Group');
+			var markerVisibility = {};
+			markers.forEach(function(marker) {
+				markerVisibility[marker.uuid] = marker.visible;
+			});
+
+			function onMarkerVisible(marker) {
+				console.log('Now visible ' + marker.uuid + ' ' + marker.name);
+			}
+
+			function checkVisibility() {
+				markers.forEach(function (marker) {
+					if (markerVisibility[marker.uuid] !== marker.visible) {
+						// Change in visibility
+						markerVisibility[marker.uuid] = marker.visible
+						if ( marker.visible) onMarkerVisible(marker);
+					}
+				});
+			}
+
+			onRenderFcts.push(function (_) { checkVisibility(); });
+
 			// render the scene
 			onRenderFcts.push(function() {
 				renderer.render(scene, camera);
