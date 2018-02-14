@@ -88,18 +88,18 @@
 			//hiroMarker.add(hiroMesh);
 
 			var cubeGroup = new THREE.Group;
-			cubeGroup.scale.set(1,1,2).multiplyScalar(1.2);
+			cubeGroup.scale.set(1,1,1).multiplyScalar(1.2);
 			cubeGroup.rotation.x = -Math.PI/2
-			cubeGroup.position.y = -cubeGroup.scale.x;
+			cubeGroup.position.y = -cubeGroup.scale.x/2;
 			hiroMarker.add(cubeGroup);
 
-			var invisibleGeometry = new THREE.BoxGeometry(1,1,2);
+			var invisibleGeometry = new THREE.BoxGeometry(1,1,1);
 			invisibleGeometry.faces.splice(8,2); // Use plane instead?
 			var invisibleMaterial = new THREE.MeshBasicMaterial({
 				colorWrite: false
 			})
 			var invisibleMesh = new THREE.Mesh(invisibleGeometry, invisibleMaterial);
-			invisibleMesh.scale.set(1,1,2).multiplyScalar(0.89);
+			invisibleMesh.scale.set(1,1,1).multiplyScalar(1.01);
 			cubeGroup.add(invisibleMesh);
 		
 			cubeGroup.add(hiroMesh);
