@@ -135,7 +135,7 @@
 			});
 
 			var pointLight = new THREE.PointLight( 0xe6f2ff );
-			pointLight.position.set(0, -0.8, 0);
+			pointLight.position.set(0.4, 1, 0.75);
 			cubeGroup.add(pointLight);
 			// var sphereGeometry = new THREE.SphereGeometry(100, 8, 4);
 			// var sphereMaterial = new THREE.MeshBasicMaterial({ color: 0xffaa00 });
@@ -144,13 +144,15 @@
 			// pointLight.add(sphereMesh);
 
 			objectLoader.load(
-				THREEx.ArToolkitContext.baseURL + 'data/building.json',
+				THREEx.ArToolkitContext.baseURL + 'data/tunnel.json',
 				function (obj) {
-					obj.scale.setScalar(0.2, 0.2, 0.2);
-					obj.position.z = -0.5;
-					obj.rotation.x = Math.PI/2;
+					obj.scale.setScalar(0.12, 0.12, 0.12);
+					obj.position.x = -0.2;
+					obj.position.y = -0.66;
+					obj.position.z = 0.5;
+					obj.rotation.y = -Math.PI/2;
 					cubeGroup.add(obj);
-					cubeGroup.add(directionalLight);
+					//cubeGroup.add(directionalLight);
 					// obj.traverse(function (child) {
 					// 	if (child instanceof THREE.Mesh) {
 					// 		teaMesh = child;

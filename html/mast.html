@@ -131,11 +131,12 @@
 			var teaMesh = null;
 			var objectLoader = new THREE.ObjectLoader();
 			var lambert = new THREE.MeshLambertMaterial({
-				color: 0x5c666b
+				color: 0x5c666b,
+				side: THREE.DoubleSide
 			});
 
 			var pointLight = new THREE.PointLight( 0xe6f2ff );
-			pointLight.position.set(0, -0.8, 0);
+			pointLight.position.set(0.4, 1, 0.75);
 			cubeGroup.add(pointLight);
 			// var sphereGeometry = new THREE.SphereGeometry(100, 8, 4);
 			// var sphereMaterial = new THREE.MeshBasicMaterial({ color: 0xffaa00 });
@@ -144,13 +145,20 @@
 			// pointLight.add(sphereMesh);
 
 			objectLoader.load(
-				THREEx.ArToolkitContext.baseURL + 'data/building.json',
+				THREEx.ArToolkitContext.baseURL + 'data/tunnel-2.json',
 				function (obj) {
-					obj.scale.setScalar(0.2, 0.2, 0.2);
-					obj.position.z = -0.5;
-					obj.rotation.x = Math.PI/2;
+					obj.scale.setScalar(0.07, 0.07, 0.07);
+					obj.scale.setX(0.1);
+					obj.position.y = -0.38;
+					obj.position.z = -0.1;
+					obj.rotation.x = Math.PI/18;
+					obj.rotation.y = -Math.PI/2 - Math.PI/15;
+					obj.children.forEach(function (child) {
+						if (child instanceof THREE.Mesh) {
+							child.material = lambert;
+						}
+					})
 					cubeGroup.add(obj);
-					cubeGroup.add(directionalLight);
 					// obj.traverse(function (child) {
 					// 	if (child instanceof THREE.Mesh) {
 					// 		teaMesh = child;
