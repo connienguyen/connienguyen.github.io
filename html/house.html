@@ -26,7 +26,7 @@
 
 			// init scene and camera
 			var scene = new THREE.Scene();
-			var camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 1000 );
+			var camera = new THREE.PerspectiveCamera( 45, window.innerHeight / window.innerWidth, 1, 1000 );
 			scene.add(camera);
 
 			// handle arToolkitSource
@@ -84,6 +84,20 @@
 				side: THREE.BackSide
 			});
 			var hiroMesh = new THREE.Mesh(hiroGeometry, normalMaterial);
+			var textureLoader = new THREE.TextureLoader();
+			textureLoader.load(
+				THREEx.ArToolkitContext.baseURL + 'data/earthy_texture.jpg',
+				function (texture) {
+					var textureMaterial = new THREE.MeshBasicMaterial({
+						map: texture,
+						side: THREE.BackSide
+					});
+					hiroMesh.material = textureMaterial
+				},
+				undefined,
+				function (err) {
+					console.log('Texture loader error: ', err); 
+				}); 
 			//hiroMesh.position.y = hiroGeometry.parameters.height/2;
 			//hiroMarker.add(hiroMesh);
 
@@ -117,8 +131,7 @@
 			var teaMesh = null;
 			var objectLoader = new THREE.ObjectLoader();
 			var lambert = new THREE.MeshLambertMaterial({
-				color: 0x0000ff,
-				wireframe: true
+				color: 0x5c666b
 			});
 
 			var pointLight = new THREE.PointLight( 0xe6f2ff );
@@ -134,9 +147,8 @@
 				THREEx.ArToolkitContext.baseURL + 'data/building.json',
 				function (obj) {
 					obj.scale.setScalar(0.2, 0.2, 0.2);
-					obj.position.y = -0.5;
-					obj.position.z = 0;
-					obj.rotation.y = Math.PI/2;
+					obj.position.z = -0.5;
+					obj.rotation.x = Math.PI/2;
 					cubeGroup.add(obj);
 					cubeGroup.add(directionalLight);
 					// obj.traverse(function (child) {
@@ -183,7 +195,7 @@
 			var t = 0;
 			onRenderFcts.push(function (delta) {
 				t+= delta;
-				moveLight(t);
+				//moveLight(t);
 				// if (teaMesh !== null) {
 				// 	t+= delta;
 				// 	animateBobbing(teaMesh, t);
