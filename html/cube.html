@@ -42,6 +42,8 @@
 				// Height is taller
 				arToolkitSource.sourceWidth = 480;
 				arToolkitSource.sourceHeight = 640;
+				arToolkitSource.displayWidth = 480;
+				arToolkitSource.displayHeight = 640;
 			}
 
 			arToolkitSource.init(function onReady() {
@@ -64,10 +66,13 @@
 			// initialize arToolkitContext
 			var arToolkitContext = new THREEx.ArToolkitContext({
 				cameraParametersUrl: THREEx.ArToolkitContext.baseURL + 'data/camera_para.dat',
-				detectionMode: 'mono',
-				canvasWidth: 640,
-				canvasHeight: Math.ceil(640 / aspectRatio)
+				detectionMode: 'mono'
 			});
+
+			if (aspectRatio < 1.0) {
+				arToolkitContext.canvasWidth = 480;
+				arToolkitContext.canvasHeight = 640;
+			}
 
 			arToolkitContext.init(function onCompleted() {
 				camera.projectionMatrix.copy(arToolkitContext.getProjectionMatrix());
