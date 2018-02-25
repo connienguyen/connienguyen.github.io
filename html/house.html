@@ -147,7 +147,9 @@
 				THREEx.ArToolkitContext.baseURL + 'data/building.json',
 				function (obj) {
 					obj.scale.setScalar(0.2, 0.2, 0.2);
-					obj.position.z = -0.5;
+					obj.scale.setY(0.3);
+					//obj.scale.setZ(0.3);
+					obj.position.z = 0.1;
 					obj.rotation.x = Math.PI/2;
 					cubeGroup.add(obj);
 					cubeGroup.add(directionalLight);

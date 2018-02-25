@@ -75,7 +75,7 @@
 			scene.add(hiroMarker);
 			var _ = new THREEx.ArMarkerControls(arToolkitContext, hiroMarker, {
 				type: 'pattern',
-				patternUrl: THREEx.ArToolkitContext.baseURL + 'data/patt.hiro'
+				patternUrl: THREEx.ArToolkitContext.baseURL + 'data/angard.patt'
 			});
 			var hiroGeometry = new THREE.CubeGeometry(1,1,1);
 			var normalMaterial = new THREE.MeshNormalMaterial({
@@ -131,12 +131,11 @@
 			var teaMesh = null;
 			var objectLoader = new THREE.ObjectLoader();
 			var lambert = new THREE.MeshLambertMaterial({
-				color: 0x5c666b,
-				side: THREE.DoubleSide
+				color: 0x5c666b
 			});
 
 			var pointLight = new THREE.PointLight( 0xe6f2ff );
-			pointLight.position.set(0.4, 1, 2.75);
+			pointLight.position.set(0.4, 1, 0.75);
 			cubeGroup.add(pointLight);
 			// var sphereGeometry = new THREE.SphereGeometry(100, 8, 4);
 			// var sphereMaterial = new THREE.MeshBasicMaterial({ color: 0xffaa00 });
@@ -144,24 +143,16 @@
 			// sphereMesh.scale.setScalar(0.7, 0.7, 0.7);
 			// pointLight.add(sphereMesh);
 
-			var waterMaterial = new THREE.MeshStandardMaterial({
-				color: 0x4986a0,
-				metalness: 0.58,
-				roughness: 0.48
-			});
 			objectLoader.load(
-				THREEx.ArToolkitContext.baseURL + 'data/river.json',
+				THREEx.ArToolkitContext.baseURL + 'data/tunnel.json',
 				function (obj) {
-					obj.scale.setX(0.005);
-					obj.scale.setY(0.001);
-					obj.scale.setZ(0.00165);
-					obj.rotation.x = Math.PI/2;
-					obj.children.forEach(function (child) {
-						if (child instanceof THREE.Mesh) {
-							child.material = waterMaterial;
-						}
-					})
+					obj.scale.setScalar(0.12, 0.12, 0.12);
+					obj.position.x = -0.2;
+					obj.position.y = -0.66;
+					obj.position.z = 0.5;
+					obj.rotation.y = -Math.PI/2;
 					cubeGroup.add(obj);
+					//cubeGroup.add(directionalLight);
 					// obj.traverse(function (child) {
 					// 	if (child instanceof THREE.Mesh) {
 					// 		teaMesh = child;
@@ -200,13 +191,13 @@
 
 			function moveLight(t) {
 				pointLight.position.x = 1.2 * Math.cos( t );
-				pointLight.position.y = 1.2* Math.sin( t );
+				pointLight.position.z = 1.2* Math.sin( t );
 			}
  
 			var t = 0;
 			onRenderFcts.push(function (delta) {
 				t+= delta;
-				moveLight(t);
+				//moveLight(t);
 				// if (teaMesh !== null) {
 				// 	t+= delta;
 				// 	animateBobbing(teaMesh, t);
