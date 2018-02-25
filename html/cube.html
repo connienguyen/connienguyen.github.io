@@ -26,13 +26,23 @@
 
 			// init scene and camera
 			var scene = new THREE.Scene();
-			var camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 1000 );
+			var aspectRatio = window.innerWidth / window.innerHeight;
+			console.log(aspectRatio);
+			var camera = new THREE.PerspectiveCamera( 45, aspectRatio, 1, 1000 );
 			scene.add(camera);
 
 			// handle arToolkitSource
 			var arToolkitSource = new THREEx.ArToolkitSource({
-				sourceType: 'webcam'
+				sourceType: 'webcam',
+				sourceWidth: 640,
+				sourceHeight: 480
 			});
+
+			if (aspectRatio < 1.0) {
+				// Height is taller
+				arToolkitSource.sourceWidth = 480;
+				arToolkitSource.sourceHeight = 640;
+			}
 
 			arToolkitSource.init(function onReady() {
 				onResize();
@@ -55,8 +65,8 @@
 			var arToolkitContext = new THREEx.ArToolkitContext({
 				cameraParametersUrl: THREEx.ArToolkitContext.baseURL + 'data/camera_para.dat',
 				detectionMode: 'mono',
-				canvasWidth: window.innerWidth,
-				canvasHeight: window.innerHeight
+				canvasWidth: 640,
+				canvasHeight: Math.ceil(640 / aspectRatio)
 			});
 
 			arToolkitContext.init(function onCompleted() {
