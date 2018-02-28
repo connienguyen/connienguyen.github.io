@@ -75,7 +75,7 @@
 			scene.add(hiroMarker);
 			var _ = new THREEx.ArMarkerControls(arToolkitContext, hiroMarker, {
 				type: 'pattern',
-				patternUrl: THREEx.ArToolkitContext.baseURL + 'data/linnebw.patt'
+				patternUrl: THREEx.ArToolkitContext.baseURL + 'data/linne2.patt'
 			});
 			var hiroGeometry = new THREE.CubeGeometry(1,1,1);
 			var normalMaterial = new THREE.MeshNormalMaterial({
@@ -145,9 +145,9 @@
 			// pointLight.add(sphereMesh);
 
 			var waterMaterial = new THREE.MeshStandardMaterial({
-				color: 0x4986a0,
-				metalness: 0.58,
-				roughness: 0.48
+				color: 0x263c50,
+				metalness: 0.7,
+				roughness: 0.3
 			});
 			objectLoader.load(
 				THREEx.ArToolkitContext.baseURL + 'data/river.json',
