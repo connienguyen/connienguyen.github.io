@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 	<head>
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<title>Underground Viewer</title>
 		<!-- library setup -->
 		<script src="../js/three.min.js"></script>
 		<script src="../js/ar.min2.js"></script>
@@ -168,62 +169,119 @@
 				}
 			)
 
-			var hiroMarker = new THREE.Group;
-			hiroMarker.name = 'hiro';
-			scene.add(hiroMarker);
-			var _ = new THREEx.ArMarkerControls(arToolkitContext, hiroMarker, {
-				type: 'pattern',
-				patternUrl: THREEx.ArToolkitContext.baseURL + 'data/patt.hiro'
-			});
-			var hiroGeometry = new THREE.CubeGeometry(1,1,1);
-			var normalMaterial = new THREE.MeshNormalMaterial({
-				transparent: true,
-				//opacity: 0.7,
-				side: THREE.BackSide
-			});
-			var hiroMesh = new THREE.Mesh(hiroGeometry, normalMaterial);
-			var textureLoader = new THREE.TextureLoader();
-			textureLoader.load(
-				THREEx.ArToolkitContext.baseURL + 'data/earthy_texture.jpg',
-				function (texture) {
-					var textureMaterial = new THREE.MeshBasicMaterial({
-						map: texture,
-						side: THREE.BackSide
-					});
-					hiroMesh.material = textureMaterial
-				},
-				undefined,
-				function (err) {
-					console.log('Texture loader error: ', err); 
-				}); 
-			//hiroMesh.position.y = hiroGeometry.parameters.height/2;
-			//hiroMarker.add(hiroMesh);
+			// Load objects for different models
+			// FIXME: Strange glitch where invisible box does not work if one loader is used for multiple models
+			var angardsLoader = new THREE.ObjectLoader();
+			angardsLoader.load(
+				THREEx.ArToolkitContext.baseURL + 'data/building.json', loadedAngards
+			);
 
-			// var cubeGroup = new THREE.Group;
-			// cubeGroup.scale.set(1,1,1).multiplyScalar(1.2);
-			// cubeGroup.rotation.x = -Math.PI/2
-			// cubeGroup.position.y = -cubeGroup.scale.x/2;
-			// hiroMarker.add(cubeGroup);
-
-			// var invisibleGeometry = new THREE.BoxGeometry(1,1,1);
-			// invisibleGeometry.faces.splice(8,2); // Use plane instead?
-			// var invisibleMaterial = new THREE.MeshBasicMaterial({
-			// 	colorWrite: false
-			// })
-			// var invisibleMesh = new THREE.Mesh(invisibleGeometry, invisibleMaterial);
-			// invisibleMesh.scale.set(1,1,1).multiplyScalar(1.01);
-			// cubeGroup.add(invisibleMesh);
-		
-			// cubeGroup.add(hiroMesh);
+			var lillaLoader = new THREE.ObjectLoader();
+			lillaLoader.load(
+				THREEx.ArToolkitContext.baseURL + 'data/tunnel.json', loadedLilla
+			);
 
 
-			// var kanjiMarker = new THREE.Group;
-			// kanjiMarker.name = 'kanji';
-			// scene.add(kanjiMarker);
-			// var _ = new THREEx.ArMarkerControls(arToolkitContext, kanjiMarker, {
-			// 	type: 'pattern',
-			// 	patternUrl: THREEx.ArToolkitContext.baseURL + 'data/patt.kanji'
-			// });
+			var linneLoader = new THREE.ObjectLoader();
+			linneLoader.load(
+				THREEx.ArToolkitContext.baseURL + 'data/river.json', loadedLinne
+			);
+
+			var mastLoader = new THREE.ObjectLoader();
+			mastLoader.load(
+				THREEx.ArToolkitContext.baseURL + 'data/tunnel-2.json', loadedMast
+			);
+
+
+			function loadedAngards(obj) {
+				var angardsCubeGroup = null;
+				if (angardsMarker.children.length > 0) {
+					angardsCubeGroup = angardsMarker.children[0];
+				}	
+				var pointLight = new THREE.PointLight( 0xe6f2ff );
+				pointLight.position.set(0, -0.8, 0);
+				obj.scale.setScalar(0.2, 0.2, 0.2);
+				obj.scale.setY(0.3);
+				obj.position.z = 0.1;
+				obj.rotation.x = Math.PI/2;
+				angardsCubeGroup.add(obj);
+				angardsCubeGroup.add(pointLight);
+			}
+
+			function loadedLilla(obj) {
+				var lillaCubeGroup = lillaMarker.children[0];
+				if (!lillaCubeGroup) {
+					return;
+				}
+				var pointLight = new THREE.PointLight( 0xe6f2ff );
+				pointLight.position.set(0.4, 1, 0.75);
+				obj.scale.setScalar(0.12, 0.12, 0.12);
+				obj.position.x = -0.2;
+				obj.position.y = -0.66;
+				obj.position.z = 0.5;
+				obj.rotation.y = -Math.PI/2;
+				lillaCubeGroup.add(obj);
+				lillaCubeGroup.add(pointLight);
+			}
+
+			function loadedLinne(obj) {
+				var linneCubeGroup = null;
+				if (linneMarker.children.length > 0) {
+					linneCubeGroup = linneMarker.children[0];
+				}
+
+				var waterMaterial = new THREE.MeshStandardMaterial({
+					color: 0x263c50,
+					metalness: 0.7,
+					roughness: 0.3
+				});
+				var pointLight = new THREE.PointLight( 0xe6f2ff );
+				pointLight.position.set(0.4, 1, 2.75);
+				var waterMaterial = new THREE.MeshStandardMaterial({
+					color: 0x263c50,
+					metalness: 0.7,
+					roughness: 0.3
+				});
+				obj.scale.setX(0.005);
+				obj.scale.setY(0.001);
+				obj.scale.setZ(0.00165);
+				obj.rotation.x = Math.PI/2;
+				obj.children.forEach(function (child) {
+					if (child instanceof THREE.Mesh) {
+						child.material = waterMaterial;
+					}
+					linneLight = pointLight;
+					linneCubeGroup.add(obj);
+					linneCubeGroup.add(pointLight);
+				})
+			}
+
+			function loadedMast(obj) {
+				var mastCubeGroup = mastMarker.children[0];
+				if (!mastCubeGroup) {
+					return;
+				}
+
+				var lambert = new THREE.MeshLambertMaterial({
+					color: 0x5c666b,
+					side: THREE.DoubleSide
+				});
+				var pointLight = new THREE.PointLight( 0xe6f2ff );
+				pointLight.position.set(0.4, 1, 0.75);
+				obj.scale.setScalar(0.07, 0.07, 0.07);
+				obj.scale.setX(0.1);
+				obj.position.y = -0.1;
+				obj.position.z = -0.1;
+				obj.rotation.y = -Math.PI/2;
+				obj.children.forEach(function (child) {
+					if (child instanceof THREE.Mesh) {
+						child.material = lambert;
+					}
+				})
+				mastCubeGroup.add(pointLight);
+				mastTunnel = obj;
+				mastCubeGroup.add(obj);
+			}
 
 			// Load teapot for inside of cube
 			var teaMesh = null;
@@ -233,123 +291,22 @@
 				side: THREE.DoubleSide
 			});
 
-			var pointLight = new THREE.PointLight( 0xe6f2ff );
-			pointLight.position.set(0.4, 1, 2.75);
-			//cubeGroup.add(pointLight);
-
-			// var sphereGeometry = new THREE.SphereGeometry(100, 8, 4);
-			// var sphereMaterial = new THREE.MeshBasicMaterial({ color: 0xffaa00 });
-			// var sphereMesh = new THREE.Mesh(sphereGeometry, sphereMaterial);
-			// sphereMesh.scale.setScalar(0.7, 0.7, 0.7);
-			// pointLight.add(sphereMesh);
-
-			var waterMaterial = new THREE.MeshStandardMaterial({
-				color: 0x263c50,
-				metalness: 0.7,
-				roughness: 0.3
-			});
-			objectLoader.load(
-				THREEx.ArToolkitContext.baseURL + 'data/river.json', loadedModel
-				// function (obj) {
-				// 	obj.scale.setX(0.005);
-				// 	obj.scale.setY(0.001);
-				// 	obj.scale.setZ(0.00165);
-				// 	obj.rotation.x = Math.PI/2;
-				// 	obj.children.forEach(function (child) {
-				// 		if (child instanceof THREE.Mesh) {
-				// 			child.material = waterMaterial;
-				// 		}
-				// 	})
-				// 	cubeGroup.add(obj);
-				// 	// obj.traverse(function (child) {
-				// 	// 	if (child instanceof THREE.Mesh) {
-				// 	// 		teaMesh = child;
-				// 	// 		teaMesh.material = lambert;
-				// 	// 		teaMesh.scale.set(0.2,0.2,0.3);
-				// 	// 		teaMesh.position.y = 0;
-				// 	// 		teaMesh.position.z += teaMesh.scale.z/2;
-				// 	// 		teaMesh.rotation.z = Math.PI;
-				// 	// 		cubeGroup.add(teaMesh);
-				// 	// 	}
-				// 	// })
-				// }
-			);
-
-			function loadModel(url, customizationCallback) {
-				customizationCallback();
-			}
-
-			function customizeWater(obj) {
-				obj.scale.setX(0.005);
-				obj.scale.setY(0.001);
-				obj.scale.setZ(0.00165);
-				obj.rotation.x = Math.PI/2;
-				obj.children.forEach(function (child) {
-					if (child instanceof THREE.Mesh) {
-						child.material = waterMaterial;
-					}
-					cubeGroup.add(obj);
-				})
-			}
-
-			function loadedModel(obj) {
-				// obj.scale.setX(0.005);
-				// obj.scale.setY(0.001);
-				// obj.scale.setZ(0.00165);
-				// obj.rotation.x = Math.PI/2;
-				// obj.children.forEach(function (child) {
-				// 	if (child instanceof THREE.Mesh) {
-				// 		child.material = waterMaterial;
-				// 	}
-				// 	cubeGroup.add(obj);
-				// })
-			}
-
-			// Load object for kanjiMarker
-			/*
-			var objectLoader = new THREE.ObjectLoader();
-			objectLoader.load(
-				THREEx.ArToolkitContext.baseURL + 'data/teapot-claraio.json',
-				function (obj) {
-					obj.traverse(function (child) {
-						if ( child instanceof THREE.Mesh ) {
-							child.material = normalMaterial;
-							child.scale.set(0.4, 0.4, 0.4);
-						}
-					});
-					kanjiMarker.add(obj);
-				}
-				);
-
-			*/
-			// Animations
 			function animateBobbing(mesh, t) {
-				mesh.position.z = 0.2*Math.sin(t) + 0.4;
+				mesh.position.z = 0.4*Math.sin(t) + 0.2;
 			}
 
-			function moveLight(t) {
-				pointLight.position.x = 1.2 * Math.cos( t );
-				pointLight.position.y = 1.2* Math.sin( t );
+			function moveLight(light, t) {
+				light.position.x = 1.2 * Math.cos( t );
+				light.position.y = 1.2* Math.sin( t );
 			}
  
 			var t = 0;
+			var linneLight;
+			var mastTunnel;
 			onRenderFcts.push(function (delta) {
 				t+= delta;
-				moveLight(t);
-				// if (teaMesh !== null) {
-				// 	t+= delta;
-				// 	animateBobbing(teaMesh, t);
-				// 	teaMesh.rotation.y += Math.PI*delta;
-				// }
-				/*
-				kanjiMarker.children.forEach(function (child) {
-					if ( child instanceof THREE.Mesh ) {
-						t += delta;
-						animateBobbing(child, t);
-						child.rotation.y += Math.PI*delta;
-					}
-				});
-				*/
+				moveLight(linneLight, t);
+				animateBobbing(mastTunnel, t);
 			})
 
 
