@@ -18,16 +18,19 @@ $(document).ready(function() {
 		toggleDuration: true
 	});
 
-	$("#lilla").click(function () {
-		$("#jquery_jplayer_1").trigger("lillabommen");
-	});
-
-	$("#linne").click(function () {
-		$("#jquery_jplayer_1").trigger("linne");
-	});
-
 	// Add event listeners
-	$("#jquery_jplayer_1").on("lillabommen", function (event) {
+	$("#jquery_jplayer_1").on("angards", function (event) {
+		var currentAudioTitle = $(this).jPlayer()[0].children[1].title;
+		if (currentAudioTitle !== "Ängårdsbergen") {
+			$(this).jPlayer("setMedia", {
+				title: "Ängårdsbergen",
+				mp3: "/data/audio/angardsbergen_reaper.mp3",
+				wav: "/data/audio/angardsbergen_reaper.wav"
+			});
+		}
+	});
+
+	$("#jquery_jplayer_1").on("lilla", function (event) {
 		var currentAudioTitle = $(this).jPlayer()[0].children[1].title;
 		// Prevent reloading existing audio
 		if (currentAudioTitle !== "Lilla bommen") {
@@ -40,18 +43,24 @@ $(document).ready(function() {
 	});
 
 	$("#jquery_jplayer_1").on("linne", function (event) {
-		$(this).jPlayer("setMedia", {
-			title: "Linné",
-			mp3: "/data/audio/linne_reaper.mp3",
-			wav: "/data/audio/linne_reaper.wav"
-		});
+		var currentAudioTitle = $(this).jPlayer()[0].children[1].title;
+		if (currentAudioTitle !== "Linné") {
+			$(this).jPlayer("setMedia", {
+				title: "Linné",
+				mp3: "/data/audio/linne_reaper.mp3",
+				wav: "/data/audio/linne_reaper.wav"
+			});
+		}
 	});
 
-	$("#jquery_jplayer_1").on("masthugget", function (event) {
-		$(this).jPlayer("setMedia", {
-			title: "Linné",
-			mp3: "/data/audio/masthugget_reaper.mp3",
-			wav: "/data/audio/masthugget_reaper.wav"
-		});
+	$("#jquery_jplayer_1").on("mast", function (event) {
+		var currentAudioTitle = $(this).jPlayer()[0].children[1].title;
+		if (currentAudioTitle !== "Masthugget") {
+			$(this).jPlayer("setMedia", {
+				title: "Masthugget",
+				mp3: "/data/audio/masthugget_reaper.mp3",
+				wav: "/data/audio/masthugget_reaper.wav"
+			});
+		}
 	});
 });
