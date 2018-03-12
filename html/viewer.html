@@ -60,7 +60,8 @@
 
 			// init scene and camera
 			var scene = new THREE.Scene();
-			var camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 1000 );
+			var camera = new THREE.Camera();
+			//var camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 1000 );
 			scene.add(camera);
 
 			// handle arToolkitSource
@@ -154,7 +155,7 @@
 			});
 			var _ = new THREEx.ArMarkerControls(arToolkitContext, lillaMarker, {
 				type: 'pattern',
-				patternUrl: THREEx.ArToolkitContext.baseURL + 'data/lilla.patt'
+				patternUrl: THREEx.ArToolkitContext.baseURL + 'data/lilla2.patt'
 			});	
 			var _ = new THREEx.ArMarkerControls(arToolkitContext, linneMarker, {
 				type: 'pattern',
@@ -325,12 +326,16 @@
 			});
 
 			function animateBobbing(mesh, t) {
-				mesh.position.z = 0.4*Math.sin(t) + 0.2;
+				if (mesh != null) {
+					mesh.position.z = 0.4*Math.sin(t) + 0.2;
+				}
 			}
 
 			function moveLight(light, t) {
-				light.position.x = 1.2 * Math.cos( t );
-				light.position.y = 1.2* Math.sin( t );
+				if (light != null) {
+					light.position.x = 1.2 * Math.cos( t );
+					light.position.y = 1.2* Math.sin( t );
+				}
 			}
  
 			var t = 0;
@@ -344,22 +349,25 @@
 
 
 			// Visibility detector
-			var markers = scene.children.filter(child => child.type == 'Group');
 			var markerVisibility = {};
-			markers.forEach(function(marker) {
+			markerRoots.forEach(function(marker) {
 				markerVisibility[marker.uuid] = marker.visible;
 			});
 
-			function onMarkerVisible(marker) {
-				$("#jquery_jplayer_1").trigger(marker.name);
+			var visibleMarker = "";
+			function onMarkerVisible(markerName) {
+				if (visibleMarker !== markerName) {
+					visibleMarker = markerName;
+					$("#jquery_jplayer_1").trigger(markerName);
+				}
 			}
 
 			function checkVisibility() {
-				markers.forEach(function (marker) {
+				markerRoots.forEach(function (marker) {
 					if (markerVisibility[marker.uuid] !== marker.visible) {
 						// Change in visibility
 						markerVisibility[marker.uuid] = marker.visible
-						if ( marker.visible) onMarkerVisible(marker);
+						if ( marker.visible) onMarkerVisible(marker.name);
 					}
 				});
 			}
