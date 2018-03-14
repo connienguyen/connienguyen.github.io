@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<title>Underground Viewer</title>
+		<!-- library setup -->
+		<link rel="stylesheet" href="../css/style.css">
+		<link href="https://fonts.googleapis.com/css?family=Space+Mono" rel="stylesheet">
+		<script src="../js/three.min.js"></script>
+		<script src="../js/ar.min2.js"></script>
+		<script>THREEx.ArToolkitContext.baseURL = "../"</script>
+		<script src="/js/jquery-3.3.1.min.js"></script>
+    	<script src="/js/jquery.jplayer.min.js"></script>
+    	<script src="/js/player.js"></script>
+	</head>
+	<body>
+		<div id="jquery_jplayer_1" class="jp-jplayer"></div>
+    <div id="jp_container_1" class="jp-audio" role="application" aria-label="media player">
+      <div class="jp-type-single">
+        <div class="jp-gui jp-interface">
+          <div class="jp-progress">
+            <div class="jp-seek-bar">
+              <div class="jp-play-bar"></div>
+            </div>
+            <div class="jp-current-time" role="timer" aria-label="time">&nbsp;</div>
+            <div class="jp-duration" role="timer" aria-label="duration">&nbsp;</div>
+          </div>
+          <div class="jp-controls-holder">
+            <div class="jp-controls">
+              <button class="jp-play" role="button" tabindex="0"></button>
+              <button class="jp-stop" role="button" tabindex="0"></button>
+            </div>
+          </div>
+        </div>
+        <div class="jp-details">
+          <div class="jp-title" aria-label="title">No track title</div>
+        </div>
+        <div class="jp-no-solution">
+          <span>Update Required</span>
+          To play the media you will need to either update your browser to a recent version or update your <a href="http://get.adobe.com/flashplayer/" target="_blank">Flash plugin</a>.
+        </div>
+      </div>
+    </div>
+
+		<script>
+			// initialize renderer
+			var renderer = new THREE.WebGLRenderer({
+				antialias: true,
+				alpha: true
+			});
+			renderer.setClearColor(new THREE.Color('lightgrey'), 0)
+			renderer.setSize(window.innerWidth,window.innerHeight);
+			renderer.domElement.style.position = 'absolute';
+			renderer.domElement.style.top = '0px';
+			renderer.domElement.style.left = '0px';
+			document.body.appendChild(renderer.domElement);
+
+			// array of function for the rendering loop
+			var onRenderFcts = [];
+
+			// init scene and camera
+			var scene = new THREE.Scene();
+			var camera = new THREE.Camera();
+			//var camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 1000 );
+			scene.add(camera);
+
+			// handle arToolkitSource
+			var arToolkitSource = new THREEx.ArToolkitSource({
+				sourceType: 'webcam'
+			});
+
+			arToolkitSource.init(function onReady() {
+				onResize();
+			});
+
+			// handle window resize
+			window.addEventListener('resize', function() {
+				onResize();
+			});
+
+			function onResize() {
+				arToolkitSource.onResizeElement();
+				arToolkitSource.copySizeTo(renderer.domElement);
+				if ( arToolkitSource.arController !== null ) {
+					arToolkitSource.copySizeTo(arToolkitContext.arController.canvas);
+				}
+			}
+
+			// initialize arToolkitContext
+			var arToolkitContext = new THREEx.ArToolkitContext({
+				cameraParametersUrl: THREEx.ArToolkitContext.baseURL + 'data/camera_para.dat',
+				detectionMode: 'mono'
+			});
+
+			arToolkitContext.init(function onCompleted() {
+				camera.projectionMatrix.copy(arToolkitContext.getProjectionMatrix());
+			});
+
+			// update arToolkit on every frame
+			onRenderFcts.push(function() {
+				if ( arToolkitSource.ready === false ) return;
+
+				arToolkitContext.update(arToolkitSource.domElement);
+				scene.visible = camera.visible;
+			});
+
+			// functions/models for common use
+			var _normalMaterial = new THREE.MeshNormalMaterial({
+				transparent: true,
+				side: THREE.BackSide
+			})
+
+			function createInnerMesh() {
+				var cubeGeometry = new THREE.CubeGeometry(1,1,1);
+				var cubeMesh = new THREE.Mesh(cubeGeometry, _normalMaterial);
+				cubeMesh.name = 'inner';
+				return cubeMesh;
+			}
+
+			function createInvisibleMesh() {
+				var invisibleGeometry = new THREE.BoxGeometry(1,1,1);
+				invisibleGeometry.faces.splice(8,2); // Use plane instead?
+				var invisibleMaterial = new THREE.MeshBasicMaterial({
+					colorWrite: false
+				})
+				var invisibleMesh = new THREE.Mesh(invisibleGeometry, invisibleMaterial);
+				invisibleMesh.scale.setX(1.03);
+				invisibleMesh.scale.setY(1.03);
+				invisibleMesh.scale.setZ(1.03);
+				//invisibleMesh.scale.set(1,1,1).multiplyScalar(1.03);
+				return invisibleMesh;
+			}
+
+			// create marker roots
+			var mastMarker = new THREE.Group;
+			mastMarker.name = 'mast';
+			scene.add(mastMarker);
+
+			// Add patters for markers
+			var _ = new THREEx.ArMarkerControls(arToolkitContext, mastMarker, {
+				type: 'pattern',
+				patternUrl: THREEx.ArToolkitContext.baseURL + 'data/mast.patt'
+			});		
+
+			// Create cube group for all makers
+			var markerRoots = scene.children.filter(child => child.type == 'Group');
+			var textureLoader = new THREE.TextureLoader();
+
+			markerRoots.forEach(function (marker) {
+				var innerMesh = createInnerMesh();
+				var cubeGroup = new THREE.Group;
+				cubeGroup.scale.set(1,1,1).multiplyScalar(1.2);
+				cubeGroup.rotation.x = -Math.PI/2;
+				cubeGroup.position.y = -cubeGroup.scale.x/2;
+				marker.add(cubeGroup);
+				var invisibleMesh = createInvisibleMesh();
+				cubeGroup.add(invisibleMesh);
+				cubeGroup.add(innerMesh);
+			});
+
+			textureLoader.load(
+				THREEx.ArToolkitContext.baseURL + 'data/earthy_texture.jpg',
+				function (texture) {
+					var textureMaterial = new THREE.MeshBasicMaterial({
+						map: texture,
+						side: THREE.BackSide
+					});
+					markerRoots.forEach(function(marker) {
+						var innerArr = marker.children[0].children.filter(mesh => mesh.name == 'inner');
+						if (innerArr.length > 0) {
+							var inner = innerArr[0];
+							inner.material = textureMaterial;
+						}
+					});
+				},
+				undefined,
+				function (err) {
+					console.log('Texture loader error: ', err);
+				}
+			)
+
+			// Load objects for different models
+			// FIXME: Strange glitch where invisible box does not work if one loader is used for multiple models
+			var mastLoader = new THREE.ObjectLoader();
+			mastLoader.load(
+				THREEx.ArToolkitContext.baseURL + 'data/tunnel-2.json', loadedMast
+			);
+
+			function loadedMast(obj) {
+				var mastCubeGroup = mastMarker.children[0];
+				if (!mastCubeGroup) {
+					return;
+				}
+
+				var lambert = new THREE.MeshLambertMaterial({
+					color: 0x5c666b,
+					side: THREE.DoubleSide
+				});
+				var pointLight = new THREE.PointLight( 0xe6f2ff );
+				pointLight.position.set(0.4, 1, 0.75);
+				obj.scale.setScalar(0.07, 0.07, 0.07);
+				obj.scale.setX(0.1);
+				obj.position.y = -0.1;
+				obj.position.z = -0.1;
+				obj.rotation.y = -Math.PI/2;
+				obj.children.forEach(function (child) {
+					if (child instanceof THREE.Mesh) {
+						child.material = lambert;
+					}
+				})
+				mastCubeGroup.add(pointLight);
+				mastTunnel = obj;
+				mastCubeGroup.add(obj);
+			}
+
+			// Load teapot for inside of cube
+			var teaMesh = null;
+			var objectLoader = new THREE.ObjectLoader();
+			var lambert = new THREE.MeshLambertMaterial({
+				color: 0x5c666b,
+				side: THREE.DoubleSide
+			});
+
+			function animateBobbing(mesh, t) {
+				if (mesh != null) {
+					mesh.position.z = 0.4*Math.sin(t) + 0.2;
+				}
+			}
+
+			function moveLight(light, t) {
+				if (light != null) {
+					light.position.x = 1.2 * Math.cos( t );
+					light.position.y = 1.2* Math.sin( t );
+				}
+			}
+ 
+			var t = 0;
+			var linneLight;
+			var mastTunnel;
+			onRenderFcts.push(function (delta) {
+				t+= delta;
+				moveLight(linneLight, t);
+				animateBobbing(mastTunnel, t);
+			})
+
+
+			// Visibility detector
+			var markerVisibility = {};
+			markerRoots.forEach(function(marker) {
+				markerVisibility[marker.uuid] = marker.visible;
+			});
+
+			var visibleMarker = "";
+			function onMarkerVisible(markerName) {
+				if (visibleMarker !== markerName) {
+					visibleMarker = markerName;
+					$("#jquery_jplayer_1").trigger(markerName);
+				}
+			}
+
+			function checkVisibility() {
+				markerRoots.forEach(function (marker) {
+					if (markerVisibility[marker.uuid] !== marker.visible) {
+						// Change in visibility
+						markerVisibility[marker.uuid] = marker.visible
+						if ( marker.visible) onMarkerVisible(marker.name);
+					}
+				});
+			}
+
+			onRenderFcts.push(function (_) { checkVisibility(); });
+
+			// render the scene
+			onRenderFcts.push(function() {
+				renderer.render(scene, camera);
+			});
+
+			// run rendering loop
+			var lastTimeMsec = null;
+			requestAnimationFrame(function animate(nowMsec) {
+				requestAnimationFrame(animate);
+
+				lastTimeMsec = lastTimeMsec || nowMsec - 1000/60;
+				var deltaMsec = Math.min(200, nowMsec - lastTimeMsec);
+				lastTimeMsec = nowMsec;
+
+				onRenderFcts.forEach(function (onRenderFct) {
+					onRenderFct(deltaMsec/1000, nowMsec/1000);
+				});
+			})
+		</script>
+	</body>
+</html>
