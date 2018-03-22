@@ -9,6 +9,24 @@ canvas {
 	height: 100vh;
 }
 
+a {
+	color: #3B5434;
+	text-decoration: underline;
+}
+
+a:hover,
+a:focus {
+	background: #3B5434;
+	color: #FFFFFF;
+}
+
+h2 {
+	display: inline-block;
+	background: #222222;
+	color: #FFFFFF;
+	padding: 7px 15px;
+}
+
 .carousel-container {
 	width: 400px;
 	height: 300px;
@@ -39,6 +57,111 @@ canvas {
 
 .carousel-container li.current {
 	opacity: 1;
+}
+
+.cta {
+	background-color: #7B985B;
+	width: 100vw;
+	height: 50px;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	z-index: 5;
+	vertical-align: middle;
+	text-align: center;
+}
+
+.full-body {
+	margin: 0;
+	padding: 0 0 25px;
+	/*background: #7B985B;*/
+	overflow: scroll;
+}
+
+.full-body .row {
+	margin-bottom: 20px;
+}
+
+.full-img {
+	width: 100%;
+	margin-bottom: 15px;
+}
+
+.block {
+	/*background: #3B5434;*/
+	color: #222222;
+	text-shadow: 1px 1px #7B985B;
+	padding: 7px;
+	z-index: 5;
+	text-decoration: none;
+	position: fixed;
+}
+
+.block:hover,
+.block:focus {
+	text-decoration: underline;
+}
+
+.block-left {
+	top: 5px;
+	left: 5px;
+}
+
+.block-right {
+	top: 5px;
+	right: 5px;
+}
+
+.body-max {
+	max-width: 900px;
+}
+
+.marker-label {
+	color: #222222;
+	font-style: italic;
+	font-weight: bold;
+	font-size: 125%;
+}
+
+.container-fluid > .row:last-child {
+	margin-bottom: 75px;
+}
+
+.instaImg {
+	width: 100%;
+}
+
+.instaImg > img {
+	width: 100%;
+}
+
+#ar-hint {
+	background-color: rgba(255, 255, 255, 0.5);
+	position: fixed;
+	font-size: 80%;
+	width: 100%;
+	top: 35px;
+	padding: 10px 15px;
+}
+
+#readyIcon {
+	/* Default error */
+	padding: 10px;
+	font-size: 20px;
+	background-color: red;
+	color: #FFFFFF;
+	border-radius: 3px;
+}
+
+#cameraButton {
+	width: 80%;
+	padding: 10px;
+	border: 2px solid #222222;
+	border-radius: 3px;
+}
+
+#readyIcon.ready {
+	background-color: green;
 }
 
 /*****************************

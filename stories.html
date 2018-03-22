@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Hidden Stories | Gothenburg Underground Tour</title>
+		<link href="https://fonts.googleapis.com/css?family=Space+Mono:400,700,700i" rel="stylesheet">
+		<link rel="stylesheet" href="/css/bootstrap.min.css">
+		<link rel="stylesheet" href="/css/style.css">
+	</head>
+	<body class="full-body">
+		<div class="container-fluid body-max">
+			<div class="row">
+				<div class="col-md-12">
+					<h1>Gothenburg Underground Tour</h1>
+					<h3>12-22 April 2018</h3>
+					<p>
+						<i>Gothenburg Underground Tour</i> is an audio-visual guide to four sites in Gothenburg with a hidden underground. As a tour participant you are invited to go to any or all of these sites in the order you choose. There you will find an augmented reality ‘marker’, which you can activate on a smartphone using the <a href="/html/viewer.html">AR camera link</a>. If prompted, allow access to your camera view, then point at the marker to view the augmented reality.
+					</p>
+				</div>
+			</div>
+
+			<div class="row" id="stories">
+				<div class="col-md-12">
+					<h2>Hidden Stories</h2>
+					<p>
+						Do you know stories of other sites with a ‘hidden underground’ in Gothenburg? you are invited to contribute your own anecdotes about the city using the instagram hashtag <a href="https://www.instagram.com/explore/tags/gbgunderground/" target="_blank" rel="noopener">#gbgunderground</a> as well as screenshots of your phone’s ar views of the tour.
+					</p>
+					<div id="instafeed" class="row"></div>
+				</div>
+			</div>
+		</div>
+
+		<div class="cta">
+			<span id="readyIcon" class="glyphicon glyphicon-remove"></span>
+			<a id="cameraButton" href="/html/viewer.html">Get Started</a>
+			<p>Your browser does not meet the minimum requirements.</p>
+		</div>
+		<script type"text/javascript" src="/js/DetectRTC.min.js"></script>
+		<script type="text/javascript" src="/js/jquery-3.3.1.min.js"></script>
+		<script type="text/javascript" src="/js/instafeed.min.js"></script>
+		<script type="text/javascript" src="/js/home.js"></script>
+		<script type="text/javascript">
+			var feed = new Instafeed({
+				get: 'tagged',
+				tagName: 'gbgunderground',
+				resolution: 'standard_resolution',
+				accessToken: '3649969634.ba4c844.27f72a5fb2ed43bab117fc9839bc1b89',
+				template: '<div class="col-md-4 col-sm-4 col-xs-4"><div class="instaImg"><img src="{{image}}" /></div></div>'
+			});
+			feed.run();
+		</script>
+	</body>
+</html>
