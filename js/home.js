@@ -25,3 +25,16 @@ function hasWebGL() {
 function hasWebRTC() {
     return DetectRTC.isWebRTCSupported;
 }
+
+function cropImages() {
+    $('.instaImg > img').each(function () {
+        var $image = $(this);
+        $(this).on('load', function () {
+            if ($image.height() > $image.width()) {
+                $image.addClass('portrait');
+            } else {
+                $image.addClass('landscape');
+            }
+        });
+    });
+}

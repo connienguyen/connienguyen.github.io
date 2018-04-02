@@ -129,9 +129,25 @@ h2 {
 
 .instaImg {
 	width: 100%;
+	padding-top: 100%;
+	overflow: hidden;
+	position: relative;
+	margin-bottom: 20px;
 }
 
 .instaImg > img {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+}
+
+.instaImg > .landscape {
+	height: 100%;
+}
+
+.instaImg > .portrait {
 	width: 100%;
 }
 

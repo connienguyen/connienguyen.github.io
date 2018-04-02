@@ -15,7 +15,10 @@
 					<h1>Gothenburg Underground Tour</h1>
 					<h3>12-22 April 2018</h3>
 					<p>
-						<i>Gothenburg Underground Tour</i> is an audio-visual guide to four sites in Gothenburg with a hidden underground. As a tour participant you are invited to go to any or all of these sites in the order you choose. There you will find an augmented reality ‘marker’, which you can activate on a smartphone using the <a href="/html/viewer.html">AR camera link</a>. If prompted, allow access to your camera view, then point at the marker to view the augmented reality.
+						<i>Gothenburg Underground Tour</i> is an audio-visual guide to four sites in Gothenburg with a hidden underground. As a tour participant you are invited to go to any or all of these sites in the order you choose. There you will find an augmented reality 'marker', which you can activate on a smartphone using the <a href="/html/viewer.html">AR camera link</a>. If prompted, allow access to your camera view, then point at the marker to view the augmented reality.
+					</p>
+					<p>
+						For each site there is also an audio guide, press the play button at the bottom of your screen to listen (press again to pause, press stop to restart).
 					</p>
 				</div>
 			</div>
@@ -34,7 +37,7 @@
 						<div class="col-md-8 col-sm-6">
 							<p>
 								<span class="marker-label">Marker location*</span><br>
-								Walk through the botanical gardens and up the staircase to Änggårdsbergen nature reserve. Markers can be found on the roofs of the military bunkers.
+								Walk through the botanical gardens and up to the staircase to Änggårdsbergen nature reserve. Markers can be found on the roofs of the military bunkers. It is recommended to follow Google maps directions to reach Änggårdsbergen nature reserve.
 							</p>
 
 							<p>
@@ -43,8 +46,8 @@
 							</p>
 
 							<p>
-								<span class="marker-label">Free Wi-Fi</span><br>
-								Please note there is no Wi-Fi here use 3g or <a href="/data/audio/angardsbergen_reaper.mp3" target="_blank">download mp3 before you go!</a>
+								<span class="marker-label">Audio guide MP3</span><br>
+								<a href="/data/audio/angardsbergen_reaper.mp3" target="_blank">Download link</a>
 							</p>
 						</div>
 					</div>
@@ -59,17 +62,17 @@
 						<div class="col-md-8 col-sm-6">
 							<p>
 								<span class="marker-label">Marker location*</span><br>
-								Inside pedestrian overpass tunnel connecting nordstan shopping centre to lilla bommen, behind the handrail directly above the göta tunneln underground car tunnel.
+								From Lilla Bommen tram stop, walk towards the harbour, you will see a blue pedestrian overpass tunnel connected to Nordstand shopping centre. The marker can be found inside the tunnel, on the side nearest to the harbour. Look behind the handrail, directly above the Göta Tunneln underground car tunnel and parallel to the opera house.
 							</p>
 
 							<p>
 								<span class="marker-label">Nearest stop</span><br>
-								Lilla Bommen/ Nordstan
+								Lilla Bommen
 							</p>
 
 							<p>
-								<span class="marker-label">Free Wi-Fi</span><br>
-								_Gothenburg WiFi
+								<span class="marker-label">Audio guide MP3</span><br>
+								<a href="/data/audio/lillebommen_reaper.mp3" target="_blank">Download link</a>
 							</p>
 						</div>
 					</div>
@@ -84,7 +87,7 @@
 						<div class="col-md-8 col-sm-6">
 							<p>
 								<span class="marker-label">Marker location*</span><br>
-								On the ground at transport stand B
+								You will find several markers on the ground: nearby transport stand B, next to the metro newspaper box, and on the footpath towards Rosengatan.
 							</p>
 
 							<p>
@@ -93,10 +96,9 @@
 							</p>
 
 							<p>
-								<span class="marker-label">Free Wi-Fi</span><br>
-								GothenburgGuest<br><br>
-								Please note the Wi-Fi connection can be lost during guided movemement on this tour. Use 3g or <a href="/data/audio/linne_reaper.mp3" target="_blank">download mp3 before you go!</a>
-							</p>
+								<span class="marker-label">Audio guide MP3</span><br>
+								<a href="/data/audio/linne_reaper.mp3" target="_blank">Download link</a>
+							</p>							
 						</div>
 					</div>
 
@@ -111,7 +113,7 @@
 						<div class="col-md-8 col-sm-6">
 							<p>
 								<span class="marker-label">Marker location*</span><br>
-								Go towards the shops and up the staircase or elevator. The marker is located on the ground nearby skogen arts centre.
+								From Masthugget tram stop walk towards the square Masthuggstorget (there is a big sculpture here). Go towards the shops behind. Go up the staircase or elevator next to Hemköp. Markers are located on the graound nearby Skogen arts centre (Masthuggsterrassen).
 							</p>
 
 							<p>
@@ -120,8 +122,13 @@
 							</p>
 
 							<p>
+								<span class="marker-label">Audio guide MP3</span><br>
+								<a href="/data/audio/masthugget_reaper.mp3" target="_blank">Download link</a>
+							</p>
+
+							<p>
 								<span class="marker-label">Free Wi-Fi</span><br>
-								GothenburgGuest
+								GoteborgGuest
 							</p>
 						</div>
 					</div>
@@ -170,13 +177,19 @@
 		<script type="text/javascript" src="/js/instafeed.min.js"></script>
 		<script type="text/javascript" src="/js/home.js"></script>
 		<script type="text/javascript">
+			$('.instaImg').on('load', function () {
+				console.log($(this).height());
+			});
 			var feed = new Instafeed({
 				get: 'tagged',
 				tagName: 'gbgunderground',
 				limit: 3,
 				resolution: 'standard_resolution',
 				accessToken: '3649969634.ba4c844.27f72a5fb2ed43bab117fc9839bc1b89',
-				template: '<div class="col-md-4 col-sm-4 col-xs-4"><div class="instaImg"><img src="{{image}}" /></div></div>'
+				template: '<div class="col-md-4 col-sm-4 col-xs-4"><div class="instaImg"><img src="{{image}}" /></div></div>',
+				after: function() {
+					cropImages();
+				}
 			});
 			feed.run();
 		</script>

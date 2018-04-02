@@ -46,7 +46,10 @@
 				tagName: 'gbgunderground',
 				resolution: 'standard_resolution',
 				accessToken: '3649969634.ba4c844.27f72a5fb2ed43bab117fc9839bc1b89',
-				template: '<div class="col-md-4 col-sm-4 col-xs-4"><div class="instaImg"><img src="{{image}}" /></div></div>'
+				template: '<div class="col-md-4 col-sm-4 col-xs-4"><div class="instaImg"><img src="{{image}}" /></div></div>',
+				after: function () {
+					cropImages();
+				}
 			});
 			feed.run();
 		</script>
