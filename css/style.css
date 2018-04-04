@@ -193,6 +193,7 @@ h2 {
 .instaLink,
 .instaLink:hover,
 .instaLink:focus {
+	text-decoration: none;
 	color: #222222;
 }
 
@@ -209,10 +210,19 @@ h2 {
 	display: table-cell;
 }
 
-.instaPreview:hover,
-.instaPreview:focus {
+.instaImg:hover > .instaPreview,
+.instaImg:focus > .instaPreview {
 	opacity: 1;
 	transition: all 0.3s linear;
+}
+
+.link-span {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	z-index: 2;
 }
 
 .nav-links {

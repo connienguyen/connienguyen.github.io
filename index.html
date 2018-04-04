@@ -251,7 +251,7 @@
 				limit: 3,
 				resolution: 'standard_resolution',
 				accessToken: '3649969634.ba4c844.27f72a5fb2ed43bab117fc9839bc1b89',
-				template: '<div class="col-md-4 col-sm-4 col-xs-4"><div class="instaImg"><img src="{{image}}" /><a class="instaLink" href="{{link}}" target="_blank" rel="noopener"><div class="instaPreview">{{caption}}</div></a></div></div>',
+				template: '<div class="col-md-4 col-sm-4 col-xs-4"><div class="instaImg"><a href="{{link}}" class="instaLink" target="_blank" rel="noopener"><span class="link-span"></span></a><img src="{{image}}" /><div class="instaPreview">{{caption}}</div></div></div>',
 				after: function() {
 					cropImages();
 				}
