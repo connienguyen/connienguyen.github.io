@@ -4,8 +4,7 @@ $(document).ready(function() {
         $('#readyIcon').removeClass();
         $('#readyIcon').addClass('glyphicon glyphicon-ok')
         $('#readyIcon').addClass('ready');
-        $('#ready').addClass('cameraReady');
-        $('#ready').text('Your device is ready');
+        $('#readyMessage').text('Your browser meets the minimum requirements.');
         console.log('ready');
     } else {
         console.log('notready')

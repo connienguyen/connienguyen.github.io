@@ -9,16 +9,63 @@
 		<link rel="stylesheet" href="/css/style.css">
 	</head>
 	<body class="full-body">
+		<header>
+			<ul class="nav-links">
+				<li><a href="#about">About</a></li>
+				<li><a href="#instructions">Instructions</a></li>
+				<li><a href="#locations">Locations</a></li>
+				<li><a href="/stories">Stories</a></li>
+				<li><a href="#credits">Credits</a></li>
+			</ul>
+		</header>
 		<div class="container-fluid body-max">
 			<div class="row">
 				<div class="col-md-12">
 					<h1>Gothenburg Underground Tour</h1>
 					<h3>12-22 April 2018</h3>
+					<div class="responsive-media">
+						<iframe src="https://player.vimeo.com/video/262806282" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+					</div>
 					<p>
 						<i>Gothenburg Underground Tour</i> is an audio-visual guide to four sites in Gothenburg with a hidden underground. As a tour participant you are invited to go to any or all of these sites in the order you choose. There you will find an augmented reality 'marker', which you can activate on a smartphone using the <a href="/html/viewer.html">AR camera link</a>. If prompted, allow access to your camera view, then point at the marker to view the augmented reality.
 					</p>
 					<p>
 						For each site there is also an audio guide, press the play button at the bottom of your screen to listen (press again to pause, press stop to restart).
+					</p>
+				</div>
+			</div>
+
+			<div class="row" id="instructions">
+				<div class="col-md-12">
+					<h2>Instructions</h2>
+				</div>
+				<div class="col-md-3 col-sm-6 instruction">
+					<span class="instruction-step">1</span>
+					<h5>Find the marker</h5>
+					<p>
+						Locate an AR marker at one of the four <a href="#locations">locations</a>.
+					</p>
+				</div>
+				<div class="col-md-3 col-sm-6 instruction">
+					<span class="instruction-step">2</span>
+					<h5>Get started</h5>
+					<p>
+						Tap the "Get Started" button to begin the tour.
+					</p>
+				</div>
+				<div class="clearfix visible-sm-block"></div>
+				<div class="col-md-3 col-sm-6 instruction">
+					<span class="instruction-step">3</span>
+					<h5>Point camera</h5>
+					<p>
+						Point the camera at the AR marker to activate the tour.
+					</p>
+				</div>
+				<div class="col-md-3 col-sm-6 instruction">
+					<span class="instruction-step">4</span>
+					<h5>Press play</h5>
+					<p>
+						Press the play button to start the audio guide or download the site-specific MP3 file.
 					</p>
 				</div>
 			</div>
@@ -168,10 +215,19 @@
 		</div>
 
 		<div class="cta">
-			<span id="readyIcon" class="glyphicon glyphicon-remove"></span>
-			<a id="cameraButton" href="/html/viewer.html">Get Started</a>
-			<p>Your browser does not meet the minimum requirements.</p>
+			<div class="row">
+				<div class="col-md-6 readyAction">
+					<span id="readyIcon" class="glyphicon glyphicon-remove"></span>
+					<a id="cameraButton" href="/html/viewer.html">Get Started</a>
+				</div>
+				<div class="col-md-6">
+					<span id="readyMessage">
+						Your browswer does not meet the minimum requirements.
+					</span>
+				</div>
+			</div>
 		</div>
+		
 		<script type"text/javascript" src="/js/DetectRTC.min.js"></script>
 		<script type="text/javascript" src="/js/jquery-3.3.1.min.js"></script>
 		<script type="text/javascript" src="/js/instafeed.min.js"></script>
