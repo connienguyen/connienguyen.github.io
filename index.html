@@ -208,7 +208,16 @@
 						This project was created as a collaboration between <a href="http://amyboulton.info">Amy Boulton</a> (studying MFA Fri Konst at Akademin Valand) and <a href="http://connienguyen.com">Connie Nguyen</a> (studying MSc. Interaction Design at Chalmers University of Technology).
 						<br><br>
 						Voiceover by Siri Frances Wibell<br>
-						With thanks to Slottsskogens Vandrarhem 
+						With thanks to Slottsskogens Vandrarhem <br><br>
+						Assets
+						<ul>
+							<li>Earthy grunge texture by <a href="https://www.flickr.com/photos/arrowlili/7896514764" target="_blank" rel="noopener">Anna Irving</a></li>
+							<li>Building model from <a href="https://clara.io/view/fc326539-9cc8-4b67-8fe1-dfc6bc9e1c7c" target="_blank" rel="noopener">Clara.io</a></li>
+							<li>Curved tunnel model from <a href="https://clara.io/view/63ac2908-18b5-43be-9c2a-f0b827d5de33" target="_blank" rel="noopener">Clara.io</a></li>
+							<li>River model from <a href="https://clara.io/view/1d64b8aa-b1c3-4b90-8b80-8a707a3bada1" target="_blank" rel="noopener">Clara.io</a></li>
+							<li>Boxy tunnel model from <a href="https://clara.io/view/db76ebdf-992e-4323-944d-615aa7651b24" target="_blank" rel="noopener">Clara.io</a></li>
+							<li>AR.js library by <a href="https://github.com/jeromeetienne/AR.js" target="_blank" rel="noopener">Jerome Etienne</a></li>
+						</ul>
 					</p>
 				</div>
 			</div>
@@ -227,7 +236,7 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<script type"text/javascript" src="/js/DetectRTC.min.js"></script>
 		<script type="text/javascript" src="/js/jquery-3.3.1.min.js"></script>
 		<script type="text/javascript" src="/js/instafeed.min.js"></script>
@@ -242,7 +251,7 @@
 				limit: 3,
 				resolution: 'standard_resolution',
 				accessToken: '3649969634.ba4c844.27f72a5fb2ed43bab117fc9839bc1b89',
-				template: '<div class="col-md-4 col-sm-4 col-xs-4"><div class="instaImg"><img src="{{image}}" /></div></div>',
+				template: '<div class="col-md-4 col-sm-4 col-xs-4"><div class="instaImg"><img src="{{image}}" /><a class="instaLink" href="{{link}}" target="_blank" rel="noopener"><div class="instaPreview">{{caption}}</div></a></div></div>',
 				after: function() {
 					cropImages();
 				}
